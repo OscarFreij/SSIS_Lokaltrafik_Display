@@ -1,0 +1,3 @@
+logs/*.log
+private_html/access.json
+private_html/xml_dump.xml
