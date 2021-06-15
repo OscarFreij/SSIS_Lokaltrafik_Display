@@ -1,5 +1,6 @@
 <?php
 
+// Logging config START //
 $api_log_path = "/var/www/SSIS_Lokaltrafik_Display/logs/api.log";
 
 if (!file_exists($api_log_path))
@@ -9,31 +10,21 @@ if (!file_exists($api_log_path))
 
 error_reporting(2147483647);
 ini_set('error_log', $api_log_path);
+// Logging config END //
 
-include "Container.php";
+// Require Container for functions and DB access.
+require_once "Container.php";
 $container = new Container();
 
+/*
+ * API CALL AND RESPONSE PROCESSER
+ * 1. Call DB and get request objects and start loop on them.
+ * 2. Gather XML data for single request object.
+ * 3. Save XML data to DB for later use by display.
+ * When all requests are processed the script ends.
+ */
 
-
-$requestsToDo = $container->DB()->GetCallTimeRequests();
-
-print_r($requestsToDo);
-
-function GetXMLData($externalId, $extraAttributes)
-{
-    Global $container;
-
-    $response_xml_data = file_get_contents("https://api.resrobot.se/v2/departureBoard?key=".$container->Credentials()->GetAPICredentials()['key']."&id=".$externalId."&passlist=0".$extraAttributes);
-    return $response_xml_data;
-
-    /*
-    if($response_xml_data){
-        $data = simplexml_load_string($response_xml_data);
-        echo "<pre>"; print_r($data); exit;    
-    }
-    else
-    {
-        return false;
-    }
-    */
+foreach ($container->DB()->GetCallTimeRequests() as $key => $value) {
+    $responseData = $container->Functions()->GetXMLData($value['extId'],$value['attributes']);
+    $container->DB()->StoreTimeTableData($value['id'], $responseData);
 }
