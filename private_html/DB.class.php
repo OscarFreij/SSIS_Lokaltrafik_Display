@@ -35,7 +35,6 @@ class DB
         try 
         {
             error_log("Attempting to gather CallTime Requests.", 0);
-            //$stmt = $this->pdo->prepare("SELECT stops.extId, stops.name, callTime.firstCall, callTime.lastCall, callTime.daysToCall, callTime.minutesBetweenCalls, callTime.attributes FROM callTime INNER JOIN stops ON callTime.stopId = stops.id WHERE callTime.firstCall < '$time' AND callTime.lastCall > '$time';");
             $stmt = $this->pdo->prepare("SELECT callTime.id, stops.extId, stops.name, callTime.firstCall, callTime.lastCall, callTime.daysToCall, callTime.minutesBetweenCalls, callTime.attributes FROM callTime INNER JOIN stops ON callTime.stopId = stops.id WHERE (callTime.firstCall < '$time' AND callTime.lastCall > '$time') AND MOD(".date("i",$t).",callTime.minutesBetweenCalls) = 0;");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
@@ -61,13 +60,13 @@ class DB
     {
         try
         {
-            error_log("Attempting to update database with new xmlData.", 0);
+            error_log("Attempting to update database with new xmlData. CallTimeId: $callTimeId", 0);
             $sql = "DELETE FROM timeTable WHERE timeTable.callId = $callTimeId;";
             $this->pdo->exec($sql);
 
             $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.xmlData) VALUES ($callTimeId, '$xmlData');";
             $this->pdo->exec($sql);
-            error_log("Attempting to update database with new xmlData.", 0);
+            error_log("Database updated with new xmlData. CallTimeId: $callTimeId", 0);
 
             return true;
         }
@@ -83,7 +82,7 @@ class DB
         try 
         {
             error_log("Attempting to gather XMLData from DB.", 0);
-            $stmt = $this->pdo->prepare("SELECT timeTable.dateTime, timeTable.xmlData, stops.name FROM timeTable INNER JOIN callTime ON timeTable.callId = callTime.stopId INNER JOIN stops ON callTime.stopId = stops.id;");
+            $stmt = $this->pdo->prepare("SELECT timeTable.dateTime, timeTable.xmlData, timeTable.callId, stops.name FROM timeTable JOIN (callTime JOIN stops ON stops.id = callTime.stopId) ON callTime.id = timeTable.callId;");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();
