@@ -24,7 +24,11 @@ $container = new Container();
  * When all requests are processed the script ends.
  */
 
-foreach ($container->DB()->GetCallTimeRequests() as $key => $value) {
-    $responseData = $container->Functions()->GetXMLData($value['extId'],$value['attributes']);
-    $container->DB()->StoreTimeTableData($value['id'], $responseData);
-}
+ $data = $container->DB()->GetCallTimeRequests();
+ if ($data != false)
+ {
+    foreach ($data as $key => $value) {
+        $responseData = $container->Functions()->GetXMLData($value['extId'],$value['attributes']);
+        $container->DB()->StoreTimeTableData($value['id'], $responseData);
+    }
+ }

@@ -53,6 +53,7 @@ class DB
         catch(PDOException $e)
         {
             throw new Exception("PDO CallTime Request Gathering Error: ".$e->getMessage(), 1);
+            return false;
         }
     }
 
