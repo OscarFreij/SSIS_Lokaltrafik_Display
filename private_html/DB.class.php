@@ -26,24 +26,83 @@ class DB
         }
     }
 
-    public function GetCallTimeRequests()
+    public function GetCallTimeRequests($argument)
     {
         date_default_timezone_set("Europe/Stockholm");
         $t=time();
         $time = date("h:i:s",$t);
+        $day = date("D",$t);
+        $dayId = 0;
+        switch ($day) {
+            case 'Mon':
+                $dayId = 1;
+                break;
+
+            case 'Tue':
+                $dayId = 2;
+                break;
+
+            case 'Wed':
+                $dayId = 3;
+                break;
+
+            case 'Thu':
+                $dayId = 4;
+                break;
+
+            case 'Fri':
+                $dayId = 5;
+                break;
+
+            case 'Sat':
+                $dayId = 6;
+                break;
+
+            case 'Sun':
+                $dayId = 7;
+                break;
+        
+            default:
+                $dayId = 0;
+                break;
+        }
 
         try 
         {
             error_log("Attempting to gather CallTime Requests.", 0);
-            $stmt = $this->pdo->prepare("SELECT callTime.id, stops.extId, stops.name, callTime.firstCall, callTime.lastCall, callTime.daysToCall, callTime.minutesBetweenCalls, callTime.attributes FROM callTime INNER JOIN stops ON callTime.stopId = stops.id WHERE (callTime.firstCall < '$time' AND callTime.lastCall > '$time') AND MOD(".date("i",$t).",callTime.minutesBetweenCalls) = 0;");
+            if ($argument == "force-interval")
+            {
+                $stmt = $this->pdo->prepare("SELECT callTime.id, stops.extId, stops.name, callTime.firstCall, callTime.lastCall, callTime.daysToCall, callTime.minutesBetweenCalls, callTime.attributes FROM callTime INNER JOIN stops ON callTime.stopId = stops.id WHERE (callTime.firstCall < '$time' AND callTime.lastCall > '$time')");
+            }
+            else if ($argument == "force-all")
+            {
+                $stmt = $this->pdo->prepare("SELECT callTime.id, stops.extId, stops.name, callTime.firstCall, callTime.lastCall, callTime.daysToCall, callTime.minutesBetweenCalls, callTime.attributes FROM callTime INNER JOIN stops ON callTime.stopId = stops.id");
+            }
+            else
+            {
+                $stmt = $this->pdo->prepare("SELECT callTime.id, stops.extId, stops.name, callTime.firstCall, callTime.lastCall, callTime.daysToCall, callTime.minutesBetweenCalls, callTime.attributes FROM callTime INNER JOIN stops ON callTime.stopId = stops.id WHERE (callTime.firstCall < '$time' AND callTime.lastCall > '$time') AND MOD(".date("i",$t).",callTime.minutesBetweenCalls) = 0;");
+            }
+
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();
-            
+            $returnArray = array();
+
             error_log(sizeof($data)." CallTime Request/s gatherd.", 0);
             if (sizeof($data) != 0)
             {
-                return $data;
+                foreach ($data as $id => $row) {
+                    $dayStart = substr($row['daysToCall'],0,1);
+                    $dayStop = substr($row['daysToCall'],2,1);
+                    
+                    if ((int)$dayStart <= (int)$dayId && (int)$dayId <= (int)$dayStop)
+                    {
+                        array_push($returnArray, $row);
+                    }
+                }
+
+                error_log(sizeof($returnArray)." CallTime Request/s valid and collected.", 0);
+                return $returnArray;
             }
             else
             {

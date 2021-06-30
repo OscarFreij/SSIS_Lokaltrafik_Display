@@ -24,11 +24,24 @@ $container = new Container();
  * When all requests are processed the script ends.
  */
 
- $data = $container->DB()->GetCallTimeRequests();
- if ($data != false)
- {
+if (isset($argv[1]))
+{
+    $data = $container->DB()->GetCallTimeRequests($argv[1]);
+}
+else
+{
+    $data = $container->DB()->GetCallTimeRequests("");
+}
+
+print_r($data);
+
+if ($data != false)
+{
     foreach ($data as $key => $value) {
         $responseData = $container->Functions()->GetXMLData($value['extId'],$value['attributes']);
         $container->DB()->StoreTimeTableData($value['id'], $responseData);
+        
     }
- }
+}
+
+exit;
