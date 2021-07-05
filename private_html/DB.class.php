@@ -30,7 +30,7 @@ class DB
     {
         date_default_timezone_set("Europe/Stockholm");
         $t=time();
-        $time = date("h:i:s",$t);
+        $time = date("H:i:s",$t);
         $day = date("D",$t);
         $dayId = 0;
         switch ($day) {
