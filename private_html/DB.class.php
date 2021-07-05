@@ -91,14 +91,23 @@ class DB
             error_log(sizeof($data)." CallTime Request/s gatherd.", 0);
             if (sizeof($data) != 0)
             {
-                foreach ($data as $id => $row) {
-                    $dayStart = substr($row['daysToCall'],0,1);
-                    $dayStop = substr($row['daysToCall'],2,1);
-                    
-                    if ((int)$dayStart <= (int)$dayId && (int)$dayId <= (int)$dayStop)
-                    {
-                        array_push($returnArray, $row);
+                if ($argument != "force-all" && $argument != "force-date")
+                {
+                    error_log("ReturnArray is set to data returned from DB, scrubbed by current day.");
+                    foreach ($data as $id => $row) {
+                        $dayStart = substr($row['daysToCall'],0,1);
+                        $dayStop = substr($row['daysToCall'],2,1);
+
+                        if ((int)$dayStart <= (int)$dayId && (int)$dayId <= (int)$dayStop)
+                        {
+                            array_push($returnArray, $row);
+                        }
                     }
+                }
+                else
+                {
+                    error_log("ReturnArray is set to data returned from DB.");
+                    $returnArray = $data;
                 }
 
                 error_log(sizeof($returnArray)." CallTime Request/s valid and collected.", 0);
@@ -106,6 +115,7 @@ class DB
             }
             else
             {
+                error_log("Gatherd requests not enough for data call");
                 return false;
             }
         }
