@@ -24,6 +24,8 @@ $container = new Container();
  * When all requests are processed the script ends.
  */
 
+error_log("======================================================");
+
 if (isset($argv[1]))
 {
     $data = $container->DB()->GetCallTimeRequests($argv[1]);
@@ -44,4 +46,5 @@ if ($data != false)
     }
 }
 
+error_log("======================================================");
 exit;
