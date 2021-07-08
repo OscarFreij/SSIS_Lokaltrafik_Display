@@ -16,6 +16,12 @@ class Container
     private $functions;
     private $credentials;
 
+    public function __construct()
+    {
+        // Container setup //
+        date_default_timezone_set("Europe/Stockholm");
+    }
+
     public function DB()
     {
         if ($this->db instanceof DB)

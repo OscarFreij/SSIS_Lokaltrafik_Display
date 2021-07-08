@@ -28,7 +28,6 @@ class DB
 
     public function GetCallTimeRequests($argument)
     {
-        date_default_timezone_set("Europe/Stockholm");
         $t=time();
         $time = date("H:i:s",$t);
         $day = date("D",$t);
