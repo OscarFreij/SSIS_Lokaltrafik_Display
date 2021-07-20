@@ -3,15 +3,19 @@
 include "../private_html/Container.php";
 $container = new Container();
 
-$dbReturn = $container->DB()->GetTimeTableData();
-
-$data = array();
-foreach ($dbReturn as $key => $value)
+if (isset($_GET['id']))
 {
-    $domObejct = "<pre>".print_r($container->Functions()->GenerateDepartureObjects($value), true)."</pre>";
-    array_push($data, $domObejct);
+    $dbReturn = $container->DB()->GetTimeTableData($_GET['id']);
+
+    $domObejct = "<pre>".print_r($container->Functions()->GenerateDepartureObjects($dbReturn[0]), true)."</pre>";
+    
+    echo($domObejct);
 }
-echo(json_encode($data,JSON_UNESCAPED_UNICODE));
+else
+{
+    echo("<h1>Missing argument: [GET] --> id : Number</h1>");
+}
+
 exit;
 
 ?>

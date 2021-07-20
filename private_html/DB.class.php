@@ -146,17 +146,17 @@ class DB
         }
     }
 
-    public function GetTimeTableData()
+    public function GetTimeTableData($id)
     {
         try 
         {
             error_log("Attempting to gather XMLData from DB.", 0);
-            $stmt = $this->pdo->prepare("SELECT timeTable.dateTime, timeTable.xmlData, timeTable.callId, stops.name FROM timeTable JOIN (callTime JOIN stops ON stops.id = callTime.stopId) ON callTime.id = timeTable.callId;");
+            $stmt = $this->pdo->prepare("SELECT timeTable.dateTime, timeTable.xmlData, timeTable.callId, stops.name FROM timeTable JOIN (callTime JOIN stops ON stops.id = callTime.stopId) ON callTime.id = timeTable.callId WHERE timeTable.callId = $id;");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();
             
-            error_log(sizeof($data)." timeTable/s gatherd..", 0);
+            error_log("Timetable with id: ".$id." gatherd for callback.");
             if (sizeof($data) != 0)
             {
                 return $data;

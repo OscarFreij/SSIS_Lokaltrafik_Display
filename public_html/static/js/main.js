@@ -1,8 +1,12 @@
-var dataArray = Array();
+var idArray = Array();
+var currentId;
+var interval = 10000;
+
+var clock = setInterval(Tick, interval);
 
 async function GetData(params) {
     $.ajax({
-        url: "https://ssis_ld.offthegridcg.me/callback.php",
+        url: "https://ssis_ld.offthegridcg.me/callback.php/?id="+params,
         beforeSend: function( xhr ) {
             xhr.overrideMimeType( "text/plain; charset=UTF-8" );
         }
@@ -12,10 +16,8 @@ async function GetData(params) {
         {
             try {
                 console.log("New Data retrived :)\nSize: "+data.length);
-                jsonData = JSON.parse(data);
-                jsonData.forEach(element => {
-                    dataArray.push(element);
-                });    
+                $('#dataBox').empty();
+                $('#dataBox').append(data);
             } catch (error) {
                 console.log(data);
             }
@@ -28,21 +30,25 @@ async function GetData(params) {
     });
 }
 
-setInterval(Tick, 10000);
-
 function Tick()
 {
-    if (dataArray.length <= 1)
+    if (idArray.length == 0)
     {
-        GetData();
+        $('#dataBox').empty();
+        $('#dataBox').append("<h1>Missing idArray Data!</h1>"); 
+        console.error("Missing idArray Data!");
     }
-    NextDataSet();
+    else
+    {
+        currentId = idArray.shift();
+        idArray.push(currentId);
+        GetData(currentId);
+    }
 }
 
-function NextDataSet()
+function SetInterval(newIntervalms)
 {
-    $('#dataBox').empty();
-    $('#dataBox').append(JSON.stringify(dataArray[0]));   
-    dataArray.shift();
+    interval = newIntervalms;
+    clearInterval(clock);
+    clock = setInterval(Tick, interval);
 }
-
