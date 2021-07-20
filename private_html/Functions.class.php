@@ -31,7 +31,7 @@ class Functions
 
         if ($printData == FALSE)
         {
-            echo("ERROR: printData equal to FALSE");
+            error_log("ERROR: printData equal to FALSE");
         }
         else
         {
