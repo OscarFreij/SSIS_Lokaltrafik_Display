@@ -47,7 +47,7 @@ class Functions
                 array_push($arrayOfObjects, $obj);
             }
         }
-        return $returnObject = (object)["callTimeID"=>$departure['callId'], "collectionDateTime"=>$departure['dateTime'], "stationName"=>$departure['name'], "departures"=>$arrayOfObjects];;
+        return $returnObject = (object)["callTimeID"=>$departure['callId'], "collectionDateTime"=>$departure['dateTime'], "stationName"=>$departure['name'], "title"=>$departure['title'], "departures"=>$arrayOfObjects];
     }
 }
 ?>

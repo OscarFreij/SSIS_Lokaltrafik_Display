@@ -151,7 +151,7 @@ class DB
         try 
         {
             error_log("Attempting to gather XMLData from DB.", 0);
-            $stmt = $this->pdo->prepare("SELECT timeTable.dateTime, timeTable.xmlData, timeTable.callId, stops.name FROM timeTable JOIN (callTime JOIN stops ON stops.id = callTime.stopId) ON callTime.id = timeTable.callId WHERE timeTable.callId = $id;");
+            $stmt = $this->pdo->prepare("SELECT timeTable.dateTime, timeTable.xmlData, timeTable.callId, callTime.title, stops.name FROM timeTable JOIN (callTime JOIN stops ON stops.id = callTime.stopId) ON callTime.id = timeTable.callId WHERE timeTable.callId = $id;");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();
