@@ -13,5 +13,6 @@
 
     </div>
     <script src="/static/js/main.js"></script>
+    <script>idArray = [7,8,9,10,11,12];Tick();</script>
 </body>
 </html>
