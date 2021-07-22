@@ -49,5 +49,11 @@ class Functions
         }
         return $returnObject = (object)["callTimeID"=>$departure['callId'], "collectionDateTime"=>$departure['dateTime'], "stationName"=>$departure['name'], "title"=>$departure['title'], "departures"=>$arrayOfObjects];
     }
+
+    public function GenerateDisplayHTML($departureObject)
+    {
+        $displayHTML = $departureObject;
+        return "<pre>".print_r($displayHTML, true)."</pre>";
+    }
 }
 ?>

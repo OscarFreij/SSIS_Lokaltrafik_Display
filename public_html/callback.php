@@ -7,7 +7,7 @@ if (isset($_GET['id']))
 {
     $dbReturn = $container->DB()->GetTimeTableData($_GET['id']);
 
-    $domObejct = "<pre>".print_r($container->Functions()->GenerateDepartureObjects($dbReturn[0]), true)."</pre>";
+    $domObejct = $container->Functions()->GenerateDisplayHTML($container->Functions()->GenerateDepartureObjects($dbReturn[0]));
     
     echo($domObejct);
 }
