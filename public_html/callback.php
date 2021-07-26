@@ -5,11 +5,8 @@ $container = new Container();
 
 if (isset($_GET['id']))
 {
-    $dbReturn = $container->DB()->GetTimeTableData($_GET['id']);
-
-    $domObejct = $container->Functions()->GenerateDisplayHTML($container->Functions()->GenerateDepartureObjects($dbReturn[0]));
-    
-    echo($domObejct);
+    $dbReturn = $container->DB()->GetTimeTableData($_GET['id'])[0];    
+    echo($container->Functions()->GenerateDisplayHTML($container->Functions()->GenerateDepartureObjects($dbReturn)));
 }
 else
 {
