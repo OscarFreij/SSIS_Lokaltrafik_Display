@@ -52,12 +52,6 @@ class Functions
 
     public function GenerateDisplayHTML($departureObject)
     {
-        return $this->GenerateDisplayHTML_NEW($departureObject);
-        //return "<pre>".print_r($departureObject, true)."</pre>";
-    }
-
-    public function GenerateDisplayHTML_NEW($departureObject)
-    {
         $data = "";
 
         $data = $data."<div id='title'>";
@@ -70,12 +64,35 @@ class Functions
             $data = $data."<h1>$departureObject->stationName</h1>";
         }
         
-        $data = $data."<h3>Hämtad: $departureObject->collectionDateTime</h3>";
+        $data = $data."<h3>Data hämtad: $departureObject->collectionDateTime</h3>";
         $data = $data."</div>";
         $data = $data."<div id='departureList'>";
         $data = $data."<ul>";
         
         foreach ($departureObject->departures as $key => $value) {
+            $timeDepartureBase = strtotime($value->date." ".$value->time);  
+            if (isset($value->rtTime))
+            {
+                if ($timeDepartureBase < strtotime($value->rtDate." ".$value->rtTime))
+                {
+                    $timeDeparture = strtotime($value->rtDate." ".$value->rtTime);
+                    $timeState = "late";
+                }
+                else
+                {
+                    $timeDeparture = $timeDepartureBase;
+                    $timeState = "onTime";
+                }
+                  
+            }
+            else
+            {
+                $timeDeparture = $timeDepartureBase;
+                $timeState = "onTime";
+            }
+            
+            
+
             $timeDeparture = strtotime($value->date." ".$value->time);
             $timeMedium = strtotime('-15 minutes', $timeDeparture);
             $timeShort = strtotime('-5 minutes', $timeDeparture);
@@ -118,7 +135,17 @@ class Functions
             $data = $data."<h2>$value->direction</h2>";
             $data = $data."<h2>$value->name</h2>";
             $data = $data."<p>Avgår: ";
-            $data = $data."<span class=''>$value->time</span>";
+
+            if ($timeState == "onTime")
+            {
+                $data = $data."<span class=''>$value->time</span>";    
+            }
+            else if ($timeState == "late")
+            {
+                $data = $data."<span class='obsolite'>$value->time</span>";
+                $data = $data." <span class=''>$value->rtTime</span>";
+            }
+            
             $data = $data."</p>";
 
             $data = $data."</li>";

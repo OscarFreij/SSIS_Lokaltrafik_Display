@@ -18,6 +18,13 @@
     color: rgb(255,100,0);
 }
 
+#departureList > ul
+{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
 li.time-passed
 {
     background-color: gray;
