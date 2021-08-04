@@ -92,23 +92,33 @@ class Functions
             }
             
             
+            
+            $dateTimeDepartureOriginal = date_create();
+            date_timestamp_set($dateTimeDepartureOriginal, strtotime($value->date." ".$value->time));
+            $dateTimeNow = new DateTime();
+            $timeDiffMedium = $dateTimeNow->diff(new DateTime("@".strval(strtotime('-15 minutes', $timeDeparture))));
+            $timeDiffShort =  $dateTimeNow->diff(new DateTime("@".strval(strtotime('-5 minutes', $timeDeparture))));;
+            $timeDiffDeparture =  $dateTimeNow->diff(new DateTime("@".strval(strtotime('-5 minutes', $timeDeparture))));;
+            $timeDiffLate =  $dateTimeDepartureOriginal->diff(new DateTime("@".strval($timeDeparture)));;
+            
+            //Debug stuff
+            //$timeDiffDataArray = array( "timeDiffMedium" => $timeDiffMedium, "timeDiffShort" => $timeDiffShort, "timeDiffDeparture" => $timeDiffDeparture, "timeDiffLate" => $timeDiffLate);
 
-            $timeDeparture = strtotime($value->date." ".$value->time);
-            $timeMedium = strtotime('-15 minutes', $timeDeparture);
-            $timeShort = strtotime('-5 minutes', $timeDeparture);
-            $timeNow = time();
-
-            if ($timeNow - $timeDeparture >= 0)
+            if ($timeDiffDeparture->invert == 1)
             {
                 $state = "passed";
             }
-            else if ($timeNow - $timeShort >= 0)
+            else if ($timeDiffShort->invert == 1)
             {
                 $state = "high";
             }
-            else if ($timeNow - $timeMedium >= 0)
+            else if ($timeDiffMedium->invert == 1)
             {
                 $state = "low";
+            }
+            else if ($timeDiffLate->invert == 1)
+            {
+                $state = "late";
             }
             else
             {
@@ -121,18 +131,21 @@ class Functions
             }
             else if ($state == "low")
             {
-                $data = $data."<li class='alert-low'>";
+                $data = $data."<li class='alert alert-low'>";
             }
             else if ($state == "high")
             {
-                $data = $data."<li class='alert-high'>";
+                $data = $data."<li class='alert alert-high'>";
             }
             else if ($state == "passed")
             {
                 $data = $data."<li class='time-passed'>";
             }
-
+            
             $data = $data."<h2>$value->direction</h2>";
+            
+            $data = $data."<p>Avgår om: #</p>";
+            
             $data = $data."<h2>$value->name</h2>";
             $data = $data."<p>Avgår: ";
 

@@ -1,3 +1,31 @@
+.background-video
+{
+    position: fixed;
+    min-width: 100%;
+    min-height: 100%;
+    z-index: -1;
+
+}
+
+body
+{
+    margin: 0;
+    background-color: black;   
+}
+
+#dataBox
+{
+    height: 100%;
+    /*width: 100%;*/
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+
+
 .obsolite
 {
     text-decoration: line-through;
@@ -18,11 +46,58 @@
     color: rgb(255,100,0);
 }
 
+#title
+{
+    height: 10vh;
+    color: whitesmoke;
+}
+
+#title > *
+{
+    margin: 0;
+}
+
+#departureList
+{
+    height: 90vh;
+}
+
 #departureList > ul
 {
     list-style-type: none;
     margin: 0;
     padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    overflow: hidden;
+    height: 90vh;
+    position: relative;
+    flex-direction: row;
+    align-content: flex-start;
+}
+
+
+/*
+#departureList > ul > *:nth-child(n+6)
+{
+    display: none;
+}
+*/
+
+li
+{
+    margin-bottom: 5px;
+    height: calc((90vh / 6) - 25px);
+    width: 100%;
+    padding: 5px;
+    border-radius: 15px;
+    border: solid cornflowerblue 5px;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    align-content: center;
+    align-items: center;
+    background-color: lightskyblue;
 }
 
 li.time-passed
@@ -31,9 +106,15 @@ li.time-passed
     display: none;
 }
 
-li
+li.alert
 {
-    border: dashed orange 5px;
+    background: repeating-linear-gradient(
+        45deg,
+        #fff,
+        #fff 25px,
+        transparent 25px,
+        transparent 50px
+    );
 }
 
 li.alert-high
@@ -41,26 +122,28 @@ li.alert-high
     animation-name: alert-high-animation;
     animation-duration: 1s;
     animation-iteration-count: infinite;
+    border: solid rgba(255, 0, 0, 1) 5px;
 }
 
 li.alert-low
-{
+{   
     animation-name: alert-low-animation;
-    animation-duration: 1s;
+    animation-duration: 2s;
     animation-iteration-count: infinite;
+    border: solid rgba(255, 102, 0, 0.8) 5px;
 }
 
 
 @keyframes alert-high-animation
 {
-    0%   {background-color: inherit;}
-    50%  {background-color: rgb(255, 0, 0, 0.6);}
-    100%   {background-color: inherit;}
+    0%   {background-color: whitesmoke;}
+    50%  {background-color: rgba(255, 0, 0, 1);}
+    100%   {background-color: whitesmoke;}
 }
 
 @keyframes alert-low-animation
 {
-    0%   {background-color: inherit;}
-    50%  {background-color: rgb(255, 255, 0, 0.6);}
-    100%   {background-color: inherit;}
+    0%   {background-color: whitesmoke;}
+    50%  {background-color: rgba(255, 102, 0, 1);}
+    100%   {background-color: whitesmoke;}
 }

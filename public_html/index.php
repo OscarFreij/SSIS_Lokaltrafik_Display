@@ -9,10 +9,12 @@
     <link rel="stylesheet" href="/static/css/master.css">
 </head>
 <body>
-    <div id="dataBox" style="border: black dashed 5px; padding: 10px; margin: 10px;">
+    <video class="background-video" src="static/media/video/Stars.mp4" type="video/mp4" autoplay="" loop="" muted=""></video>
+    <div id="dataBox">
 
     </div>
     <script src="/static/js/main.js"></script>
     <script>idArray = [7,8,9,10,11,12];Tick();</script>
+    <!--<script>idArray = [7];Tick();Tick();clearInterval(clock);</script>-->
 </body>
 </html>
