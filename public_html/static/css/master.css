@@ -15,13 +15,15 @@ body
 
 #dataBox
 {
-    height: 100%;
-    /*width: 100%;*/
-    position: absolute;
-    top: 0;
-    right: 0;
+    height: calc(100vh - 40px);
+    width: calc(100vw - 40px);
     padding-left: 20px;
     padding-right: 20px;
+
+    display: grid;
+    grid-template-columns: calc(100vw - 40px);
+    grid-template-rows: 10vh 90vh;
+    justify-items: center;
 }
 
 
@@ -50,11 +52,16 @@ body
 {
     height: 10vh;
     color: whitesmoke;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 #title > *
 {
     margin: 0;
+    font-family: Open Sans;
 }
 
 #departureList
@@ -76,14 +83,6 @@ body
     align-content: flex-start;
 }
 
-
-/*
-#departureList > ul > *:nth-child(n+6)
-{
-    display: none;
-}
-*/
-
 li
 {
     margin-bottom: 5px;
@@ -93,11 +92,23 @@ li
     border-radius: 15px;
     border: solid cornflowerblue 5px;
     display: grid;
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: calc(((90vh / 6) - 25px)/2) calc(((90vh / 6) - 25px)/2);
     grid-template-columns: 1fr 1fr;
     align-content: center;
     align-items: center;
     background-color: lightskyblue;
+}
+
+li > *
+{
+    font-size: 1.3rem;
+    font-weight: bold;
+    font-family: Roboto;
+}
+
+li > *:nth-child(even)
+{
+    text-align: end;
 }
 
 li.time-passed
@@ -130,7 +141,7 @@ li.alert-low
     animation-name: alert-low-animation;
     animation-duration: 2s;
     animation-iteration-count: infinite;
-    border: solid rgba(255, 102, 0, 0.8) 5px;
+    border: solid rgba(255, 200, 0, 1) 5px;
 }
 
 
@@ -144,6 +155,6 @@ li.alert-low
 @keyframes alert-low-animation
 {
     0%   {background-color: whitesmoke;}
-    50%  {background-color: rgba(255, 102, 0, 1);}
+    50%  {background-color: rgba(255, 200, 0, 1);}
     100%   {background-color: whitesmoke;}
 }

@@ -142,11 +142,11 @@ class Functions
                 $data = $data."<li class='time-passed'>";
             }
             
-            $data = $data."<h2>$value->direction</h2>";
+            $data = $data."<p>$value->direction</p>";
             
             $data = $data."<p>Avgår om: #</p>";
             
-            $data = $data."<h2>$value->name</h2>";
+            $data = $data."<p>$value->name</p>";
             $data = $data."<p>Avgår: ";
 
             if ($timeState == "onTime")
