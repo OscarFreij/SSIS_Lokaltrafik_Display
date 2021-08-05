@@ -19,7 +19,7 @@
 
     </div>
     <script src="/static/js/main.js"></script>
-    <!--<script>idArray = [7,8,9,10,11,12];Tick();</script>-->
-    <script>idArray = [7];Tick();Tick();clearInterval(clock);</script>
+    <script>idArray = [7,8,9,10,11,12];Tick();</script>
+    <!--<script>idArray = [12];Tick();Tick();clearInterval(clock);</script>-->
 </body>
 </html>

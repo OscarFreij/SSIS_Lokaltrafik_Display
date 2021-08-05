@@ -67,6 +67,7 @@ body
 #departureList
 {
     height: 90vh;
+    width: calc(100vw - 40px);
 }
 
 #departureList > ul

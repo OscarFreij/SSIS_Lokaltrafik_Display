@@ -98,7 +98,7 @@ class Functions
             $dateTimeNow = new DateTime();
             $timeDiffMedium = $dateTimeNow->diff(new DateTime("@".strval(strtotime('-15 minutes', $timeDeparture))));
             $timeDiffShort =  $dateTimeNow->diff(new DateTime("@".strval(strtotime('-5 minutes', $timeDeparture))));;
-            $timeDiffDeparture =  $dateTimeNow->diff(new DateTime("@".strval(strtotime('-5 minutes', $timeDeparture))));;
+            $timeDiffDeparture =  $dateTimeNow->diff(new DateTime("@".strval($timeDeparture)));;
             $timeDiffLate =  $dateTimeDepartureOriginal->diff(new DateTime("@".strval($timeDeparture)));;
             
             //Debug stuff
@@ -144,7 +144,18 @@ class Functions
             
             $data = $data."<p>$value->direction</p>";
             
-            $data = $data."<p>Avgår om: #</p>";
+            if ($timeDiffDeparture->i == 0)
+            {
+                $data = $data."<p>Avgår NU!</p>";
+            }
+            else if ($timeDiffDeparture->h == 0)
+            {
+                $data = $data."<p>Avgår om: ".$timeDiffDeparture->i." min</p>";
+            }
+            else
+            {
+                $data = $data."<p>Avgår om över 1h</p>";
+            }
             
             $data = $data."<p>$value->name</p>";
             $data = $data."<p>Avgår: ";
