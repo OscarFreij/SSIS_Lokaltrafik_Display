@@ -60,7 +60,7 @@ class Functions
     }
 
     
-    public function GenerateDisplayHTML($departureObject)
+    public function OBSOLITE_GenerateDisplayHTML($departureObject)
     {
         $data = "";
 

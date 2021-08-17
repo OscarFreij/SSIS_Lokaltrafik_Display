@@ -14,8 +14,12 @@ else if (!isset($_GET['maxCount']))
 }
 else
 {
-    echo("<pre>");
-    print_r($container->DB()->GetTimeTableData($_GET['id'], $_GET['maxCount']));
+    foreach (explode(',',$_GET['id']) as $key => $id)
+    {
+        $stationName = $container->DB()->GetCallTimeName($id);
+        $data = $container->DB()->GetTimeTableData($id, $_GET['maxCount']);
+        include "../private_html/templates/dataColumn.php";
+    }   
 }
 
 exit;

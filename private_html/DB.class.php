@@ -137,7 +137,7 @@ class DB
             foreach ($data as $cellNumber => $cell) {
                 if (isset($cell->rtUnixTimeStamp))
                 {
-                    $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.direction, timeTable.name, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp) VALUES ($callTimeId, '$cell->direction', '$cell->name', $cell->unixTimeStamp, $cell->rtUnixTimeStamp)";
+                    $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp) VALUES ($callTimeId, '$cell->direction', '$cell->name', $cell->unixTimeStamp, $cell->rtUnixTimeStamp)";
                 }
                 else
                 {
@@ -163,7 +163,7 @@ class DB
         try 
         {
             error_log("Attempting to gather XMLData from DB.", 0);
-            $stmt = $this->pdo->prepare("SELECT timeTable.callId, timeTable.collectionDateTIme, timeTable.direction, timeTable.name, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp, callTime.title, stops.name FROM timeTable JOIN (callTime JOIN stops ON stops.id = callTime.stopId) ON callTime.id = timeTable.callId WHERE timeTable.callId = $id LIMIT $maxElements;");
+            $stmt = $this->pdo->prepare("SELECT timeTable.collectionDateTime, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp FROM timeTable JOIN callTime ON callTime.id = timeTable.callId WHERE timeTable.callId = $id LIMIT $maxElements;");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();
@@ -181,6 +181,23 @@ class DB
         catch(PDOException $e)
         {
             throw new Exception("PDO TimeTable Gathering Error: ".$e->getMessage(), 1);
+        }
+    }
+
+    public function GetCallTimeName($id)
+    {
+        $stmt = $this->pdo->prepare("SELECT callTime.id, callTime.title, stops.name FROM callTime INNER JOIN stops ON callTime.stopId = stops.id WHERE callTime.id = '$id'");
+        $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        $data = $stmt->fetchAll()[0];
+
+        if (strlen($data['title']) > 0)
+        {
+            return $data['title'];
+        }
+        else
+        {
+            return $data['name'];
         }
     }
 }
