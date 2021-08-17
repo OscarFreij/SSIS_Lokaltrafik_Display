@@ -3,14 +3,19 @@
 include "../private_html/Container.php";
 $container = new Container();
 
-if (isset($_GET['id']))
+
+if (!isset($_GET['id']))
 {
-    $dbReturn = $container->DB()->GetTimeTableData($_GET['id'])[0];    
-    echo($container->Functions()->GenerateDisplayHTML($container->Functions()->GenerateDepartureObjects($dbReturn)));
+    echo("<h1>Missing argument: [GET] --> id : Number</h1>");
+}
+else if (!isset($_GET['maxCount']))
+{
+    echo("<h1>Missing argument: [GET] --> maxCount : Number</h1>");
 }
 else
 {
-    echo("<h1>Missing argument: [GET] --> id : Number</h1>");
+    echo("<pre>");
+    print_r($container->DB()->GetTimeTableData($_GET['id'], $_GET['maxCount']));
 }
 
 exit;

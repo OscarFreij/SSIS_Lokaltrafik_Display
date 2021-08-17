@@ -125,17 +125,29 @@ class DB
         }
     }
 
-    public function StoreTimeTableData($callTimeId, $xmlData)
+    public function StoreTimeTableData($callTimeId, $data)
     {
         try
-        {
-            error_log("Attempting to update database with new xmlData. CallTimeId: $callTimeId", 0);
+        {  
+            error_log("Attempting to update database with new timeTable for CallTimeId: $callTimeId"); 
+            error_log("Cleaning database of old timeTable...");
             $sql = "DELETE FROM timeTable WHERE timeTable.callId = $callTimeId;";
             $this->pdo->exec($sql);
 
-            $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.xmlData) VALUES ($callTimeId, '$xmlData');";
-            $this->pdo->exec($sql);
-            error_log("Database updated with new xmlData. CallTimeId: $callTimeId", 0);
+            foreach ($data as $cellNumber => $cell) {
+                if (isset($cell->rtUnixTimeStamp))
+                {
+                    $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.direction, timeTable.name, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp) VALUES ($callTimeId, '$cell->direction', '$cell->name', $cell->unixTimeStamp, $cell->rtUnixTimeStamp)";
+                }
+                else
+                {
+                    $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.direction, timeTable.name, timeTable.unixTimeStamp) VALUES ($callTimeId, '$cell->direction', '$cell->name', $cell->unixTimeStamp)";
+                }
+
+                $this->pdo->exec($sql);
+            }
+            
+            error_log("Successfully updated database with new timeTable for CallTimeId: $callTimeId");
 
             return true;
         }
@@ -146,12 +158,12 @@ class DB
         }
     }
 
-    public function GetTimeTableData($id)
+    public function GetTimeTableData($id, $maxElements = 99)
     {
         try 
         {
             error_log("Attempting to gather XMLData from DB.", 0);
-            $stmt = $this->pdo->prepare("SELECT timeTable.dateTime, timeTable.xmlData, timeTable.callId, callTime.title, stops.name FROM timeTable JOIN (callTime JOIN stops ON stops.id = callTime.stopId) ON callTime.id = timeTable.callId WHERE timeTable.callId = $id;");
+            $stmt = $this->pdo->prepare("SELECT timeTable.callId, timeTable.collectionDateTIme, timeTable.direction, timeTable.name, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp, callTime.title, stops.name FROM timeTable JOIN (callTime JOIN stops ON stops.id = callTime.stopId) ON callTime.id = timeTable.callId WHERE timeTable.callId = $id LIMIT $maxElements;");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();

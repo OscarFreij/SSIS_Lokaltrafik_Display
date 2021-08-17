@@ -41,8 +41,8 @@ if ($data != false)
 {
     foreach ($data as $key => $value) {
         $responseData = $container->Functions()->GetXMLData($value['extId'],$value['attributes']);
-        $container->DB()->StoreTimeTableData($value['id'], $responseData);
-        
+
+        $container->DB()->StoreTimeTableData($value['id'], $container->Functions()->GenerateDepartureObjects($responseData));
     }
 }
 
