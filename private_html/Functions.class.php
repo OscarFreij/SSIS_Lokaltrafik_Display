@@ -35,6 +35,7 @@ class Functions
         }
         else
         {
+            $dateTimeNow = new DateTime();
             foreach ($printData as $key => $element) {
                 
                 $listOfValues = $xpath->query("./@direction | ./@name", $element);
@@ -43,6 +44,8 @@ class Functions
                     $objectData += [$value->name => $value->value];
                     
                 }
+
+                $objectData  += ["collectionUnixTimeStamp" => $dateTimeNow->getTimestamp()];  
 
                 $listOfValues = $xpath->query("./@date | ./@time", $element);
                 $objectData  += ["unixTimeStamp" => strtotime($listOfValues[0]->value." ".$listOfValues[1]->value)];  

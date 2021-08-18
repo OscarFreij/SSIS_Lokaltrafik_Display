@@ -137,11 +137,11 @@ class DB
             foreach ($data as $cellNumber => $cell) {
                 if (isset($cell->rtUnixTimeStamp))
                 {
-                    $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp) VALUES ($callTimeId, '$cell->direction', '$cell->name', $cell->unixTimeStamp, $cell->rtUnixTimeStamp)";
+                    $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.collectionUnixTimeStamp, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp) VALUES ($callTimeId, $cell->collectionUnixTimeStamp, '$cell->direction', '$cell->name', $cell->unixTimeStamp, $cell->rtUnixTimeStamp)";
                 }
                 else
                 {
-                    $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.direction, timeTable.name, timeTable.unixTimeStamp) VALUES ($callTimeId, '$cell->direction', '$cell->name', $cell->unixTimeStamp)";
+                    $sql = "INSERT INTO timeTable (timeTable.callId, timeTable.collectionUnixTimeStamp, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp) VALUES ($callTimeId, $cell->collectionUnixTimeStamp, '$cell->direction', '$cell->name', $cell->unixTimeStamp)";
                 }
 
                 $this->pdo->exec($sql);
@@ -163,7 +163,7 @@ class DB
         try 
         {
             error_log("Attempting to gather XMLData from DB.", 0);
-            $stmt = $this->pdo->prepare("SELECT timeTable.collectionDateTime, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp FROM timeTable JOIN callTime ON callTime.id = timeTable.callId WHERE timeTable.callId = $id LIMIT $maxElements;");
+            $stmt = $this->pdo->prepare("SELECT timeTable.collectionUnixTimeStamp, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp FROM timeTable JOIN callTime ON callTime.id = timeTable.callId WHERE timeTable.callId = $id LIMIT $maxElements;");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();
