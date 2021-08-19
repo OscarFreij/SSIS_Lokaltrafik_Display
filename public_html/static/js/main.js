@@ -1,6 +1,6 @@
 var idArray = Array();
 var currentId;
-var interval = 10000;
+var interval = 15000;
 
 var clock = setInterval(GetData, interval);
 
