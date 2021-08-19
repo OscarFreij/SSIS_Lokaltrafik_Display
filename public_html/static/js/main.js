@@ -13,7 +13,6 @@ function GetData() {
           console.log('status: ' + textStatus + ' | collection: ' + idArray[0]);
           $("#dataBox").empty();
           $("#dataBox").append(data);
-          $("title").text("SSIS_LD:"+idArray[0]);
           idArray.push(idArray.shift());
     });
 }

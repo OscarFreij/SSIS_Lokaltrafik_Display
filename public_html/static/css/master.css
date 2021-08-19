@@ -6,6 +6,25 @@ body
     color: whitesmoke;
 }
 
+#credits-1
+{
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 1.5em;
+    font-family: 'Roboto';
+    color: goldenrod;
+}
+
+#credits-2
+{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.5em;
+    font-family: 'Roboto';
+    color: goldenrod;
+}
 
 #pageTitel
 {

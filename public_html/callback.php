@@ -16,7 +16,7 @@ else
 {
     ?>
     <div id="pageTitel">
-        Avgångar
+        Avgångar runt NOD
     </div>
     <?php
     foreach (explode(',',$_GET['id']) as $key => $id)
