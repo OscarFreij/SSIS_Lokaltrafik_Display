@@ -1,0 +1,101 @@
+body
+{
+    margin: 0;    
+    height: 100vh;
+    background-color: #323232;
+    color: whitesmoke;
+}
+
+#dataBox
+{
+    height: calc(100% - 20px);
+    width: calc(100% - 20px);
+    padding: 10px;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
+    grid-gap: 50px;
+    justify-items: center;
+}
+
+.dataColumn
+{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 6fr;
+    justify-items: center;
+    font-family: 'Exo', sans-serif;
+}
+
+.dataColumn > .titel
+{
+    align-self: center;
+}
+
+.cellColumn
+{
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(6, 1fr);
+    grid-gap: 10px;
+}
+
+.dataCell
+{
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    border: solid whitesmoke 4px;
+    border-radius: 5px;
+}
+
+.dataCell[state="passed"] 
+{
+    display: none;
+}
+
+.dataCell[state="critical"] 
+{
+    border-color: crimson;
+}
+
+
+.dataCell[state="high"] 
+{
+    border-color: orange;
+}
+
+
+.dataCell[state="low"] 
+{
+    border-color: yellow;
+}
+
+
+.dataCell > *
+{
+    align-self: center;
+}
+
+.dataCell > *:nth-child(even)
+{
+    justify-self: end;
+    margin-right: 10px;
+}
+
+.dataCell > *:nth-child(odd)
+{
+    margin-left: 10px;
+}
+
+.time
+{
+    
+}
+
+.time-old
+{
+    text-decoration: black line-through;
+}
