@@ -26,11 +26,13 @@ body
     grid-template-rows: 1fr 6fr;
     justify-items: center;
     font-family: 'Exo', sans-serif;
+    font-size: 1.5em;
 }
 
 .dataColumn > .titel
 {
     align-self: center;
+    font-size: 2em;
 }
 
 .cellColumn
@@ -97,5 +99,5 @@ body
 
 .time-old
 {
-    text-decoration: black line-through;
+    text-decoration: black line-through 0.25em;
 }
