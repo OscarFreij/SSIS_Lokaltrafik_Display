@@ -162,8 +162,11 @@ class DB
     {
         try 
         {
+            $dateTimeNow = new DateTime();
+            $currentTimestamp = $dateTimeNow->getTimestamp();
+
             error_log("Attempting to gather XMLData from DB.", 0);
-            $stmt = $this->pdo->prepare("SELECT timeTable.collectionUnixTimeStamp, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp FROM timeTable JOIN callTime ON callTime.id = timeTable.callId WHERE timeTable.callId = $id LIMIT $maxElements;");
+            $stmt = $this->pdo->prepare("SELECT timeTable.collectionUnixTimeStamp, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp FROM timeTable JOIN callTime ON callTime.id = timeTable.callId WHERE timeTable.callId = $id && ((`unixTimeStamp` > $currentTimestamp && `rtUnixTimeStamp` IS NULL) || (`rtUnixTimeStamp` > $currentTimestamp)) LIMIT $maxElements;");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();
