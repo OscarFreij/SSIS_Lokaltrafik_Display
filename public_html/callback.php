@@ -14,6 +14,11 @@ else if (!isset($_GET['maxCount']))
 }
 else
 {
+    ?>
+    <div id="pageTitel">
+        Avgångar
+    </div>
+    <?php
     foreach (explode(',',$_GET['id']) as $key => $id)
     {
         $stationName = $container->DB()->GetCallTimeName($id);

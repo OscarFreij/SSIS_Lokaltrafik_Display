@@ -40,10 +40,21 @@ class Functions
                 
                 $listOfValues = $xpath->query("./@direction | ./@name", $element);
                 $objectData = array();
-                foreach ($listOfValues as $key2 => $value) {
-                    $objectData += [$value->name => $value->value];
-                    
+
+                $directionValue = $listOfValues[0]->value;
+                $pos = strpos($directionValue,'(');
+                if (is_numeric($pos))
+                {
+                    $objectData  += ["direction" => substr($directionValue, 0, $pos)];   
                 }
+                else
+                {
+                    $objectData  += ["direction" => $directionValue];
+                }
+                
+
+                 
+                $objectData  += ["name" => $listOfValues[1]->value]; 
 
                 $objectData  += ["collectionUnixTimeStamp" => $dateTimeNow->getTimestamp()];  
 

@@ -6,6 +6,15 @@ body
     color: whitesmoke;
 }
 
+
+#pageTitel
+{
+    grid-row: 1 / 2;
+    grid-column: 1 / -1;
+    font-family: 'Exo', sans-serif;
+    font-size: 50px;
+}
+
 #dataBox
 {
     height: calc(100% - 50px);
@@ -13,8 +22,8 @@ body
     padding: 25px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: 1fr;
-    grid-gap: 25px;
+    grid-template-rows: 50px 1fr;
+    grid-column-gap: 25px;
     justify-items: center;
 }
 
@@ -26,7 +35,7 @@ body
     grid-template-rows: 1fr 6fr;
     justify-items: center;
     font-family: 'Exo', sans-serif;
-    font-size: 1.5em;
+    font-size: 1.6em;
 }
 
 .dataColumn > .titel
