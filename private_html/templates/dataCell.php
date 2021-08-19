@@ -41,7 +41,7 @@ if (!$timeDiffDeparture->h == 0 && !$timeDiffDeparture->invert)
 else
 {
     $timeUntillDeparture = ($timeDiffDeparture->i+1)." min";
-    
+
     if ($timeDiffDeparture->i == 0 && $timeDiffDeparture->invert)
     {
         $state = "critical";
@@ -74,7 +74,7 @@ else
     if ($late)
     {
         ?>
-        <span class="time"><span class="time time-old"><?=$a?></span> - <?=$b?></span>
+        <span class="time"><span class="time time-old"><?=$a?></span> - <span class="time time-new"><?=$b?></span></span>
         <?php
     }
     else

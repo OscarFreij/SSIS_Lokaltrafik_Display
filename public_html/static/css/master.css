@@ -101,3 +101,8 @@ body
 {
     text-decoration: black line-through 0.25em;
 }
+
+.time-new
+{
+    color: red;
+}
