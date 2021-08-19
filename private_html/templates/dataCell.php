@@ -40,26 +40,28 @@ if (!$timeDiffDeparture->h == 0 && !$timeDiffDeparture->invert)
 }
 else
 {
-    $timeUntillDeparture = $timeDiffDeparture->i." min";
+    $timeUntillDeparture = ($timeDiffDeparture->i+1)." min";
+    
+    if ($timeDiffDeparture->i == 0 && $timeDiffDeparture->invert)
+    {
+        $state = "critical";
+        $timeUntillDeparture = "NU";
+    }
+    else if ($timeDiffDeparture->i > 0 && $timeDiffDeparture->invert)
+    {
+        $state = "passed";
+    }
+    else if ($timeDiffShort->invert ||$timeDiffDeparture->i == 5)
+    {
+        $state = "high";
+    }
+    else if ($timeDiffMedium->invert || $timeDiffDeparture->i == 15)
+    {
+        $state = "low";
+    }
 }
 
-if ($timeDiffDeparture->i == 0 && !$timeDiffDeparture->invert)
-{
-    $state = "critical";
-    $timeUntillDeparture = "NU";
-}
-else if ($timeDiffDeparture->invert)
-{
-    $state = "passed";
-}
-else if ($timeDiffShort->invert ||$timeDiffDeparture->i == 5)
-{
-    $state = "high";
-}
-else if ($timeDiffMedium->invert || $timeDiffDeparture->i == 15)
-{
-    $state = "low";
-}
+
 
 
 ?>
