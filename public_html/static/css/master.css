@@ -8,13 +8,13 @@ body
 
 #dataBox
 {
-    height: calc(100% - 20px);
-    width: calc(100% - 20px);
-    padding: 10px;
+    height: calc(100% - 50px);
+    width: calc(100% - 50px);
+    padding: 25px;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr;
-    grid-gap: 50px;
+    grid-gap: 25px;
     justify-items: center;
 }
 
