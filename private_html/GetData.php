@@ -1,7 +1,7 @@
 <?php
 
 // Logging config START //
-$api_log_path = "/var/www/SSIS_Lokaltrafik_Display/logs/api.log";
+$api_log_path = "";
 
 if (!file_exists($api_log_path))
 {
@@ -40,9 +40,16 @@ print_r($data);
 if ($data != false)
 {
     foreach ($data as $key => $value) {
-        $responseData = $container->Functions()->GetXMLData($value['extId'],$value['attributes']);
+        try
+        {
+            $responseData = $container->Functions()->GetXMLData($value['extId'],$value['attributes']);
 
-        $container->DB()->StoreTimeTableData($value['id'], $container->Functions()->GenerateDepartureObjects($responseData));
+            $container->DB()->StoreTimeTableData($value['id'], $container->Functions()->GenerateDepartureObjects($responseData));   
+        }
+        catch(Exception $e)
+        {
+            error_log("Unable to get XML data from api regarting callTime ".$value['id']);
+        }
     }
 }
 
