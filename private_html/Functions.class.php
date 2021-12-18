@@ -13,8 +13,16 @@ class Functions
     {
         Global $container;
 
-        $response_xml_data = file_get_contents("https://api.resrobot.se/v2/departureBoard?key=".$container->Credentials()->GetAPICredentials()['key']."&id=".$externalId."&passlist=0".$extraAttributes);
-        return $response_xml_data;
+        try
+        {
+            $response_xml_data = file_get_contents("https://api.resrobot.se/v2/departureBoard?key=".$container->Credentials()->GetAPICredentials()['key']."&id=".$externalId."&passlist=0".$extraAttributes);            
+            return $response_xml_data;
+        }
+        catch (Exception $e)
+        {
+            error_log("ERROR: Unable to get data from API regarding externalId == $externalId");
+            return false;
+        }       
     }
 
     public function GenerateDepartureObjects($rawXML)
