@@ -162,30 +162,28 @@ class DB
     {
         try
         {
-            $stmt = $this->pdo->prepare("SELECT stops.travleTime FROM stops JOIN callTime ON callTime.stopId = stops.id WHERE callTime.id = $id");
+            $stmt = $this->pdo->prepare("SELECT stops.travelTime FROM stops JOIN callTime ON callTime.stopId = stops.id WHERE callTime.id = $id");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();
-            $travleTime = "-1";
-            
-            if (strval($data[0]['travleTime']) != "0")
-            {
-                $travleTime = "+".$data[0]['travleTime'];
-            }
+            $travelTime = "+ ".$data[0]['travelTime']." minutes";
             
         }
         catch (PDOException $e1)
         {
-            throw new Exception("PDO TimeTable TravleTime Gathering Error: ".$e1->getMessage(), 1);
+            throw new Exception("PDO TimeTable travelTime Gathering Error: ".$e1->getMessage(), 1);
         }
 
         try 
         {
             $dateTimeNow = new DateTime();
-            $currentTimestamp = strtotime("$travleTime minutes", $dateTimeNow->getTimestamp());
+            $dateTimeModified = $dateTimeNow;
+            $dateTimeModified->modify("-1 minute");
+            $dateTimeModified->modify($travelTime);
+            $currentTimestamp = $dateTimeModified->getTimestamp();
 
             error_log("Attempting to gather XMLData from DB.", 0);
-            $stmt = $this->pdo->prepare("SELECT timeTable.collectionUnixTimeStamp, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp, stops.travleTime FROM timeTable JOIN callTime ON callTime.id = timeTable.callId JOIN stops ON callTime.stopId = stops.id WHERE timeTable.callId = $id && ((`unixTimeStamp` > $currentTimestamp && `rtUnixTimeStamp` IS NULL) || (`rtUnixTimeStamp` > $currentTimestamp)) LIMIT $maxElements;");
+            $stmt = $this->pdo->prepare("SELECT timeTable.collectionUnixTimeStamp, timeTable.direction, timeTable.lineName, timeTable.unixTimeStamp, timeTable.rtUnixTimeStamp, stops.travelTime FROM timeTable JOIN callTime ON callTime.id = timeTable.callId JOIN stops ON callTime.stopId = stops.id WHERE timeTable.callId = $id && ((`unixTimeStamp` > $currentTimestamp && `rtUnixTimeStamp` IS NULL) || (`rtUnixTimeStamp` > $currentTimestamp)) LIMIT $maxElements;");
             $result = $stmt->setFetchMode(PDO::FETCH_ASSOC);
             $stmt->execute();
             $data = $stmt->fetchAll();

@@ -30,11 +30,10 @@ else
     $actualDepartureTime = $element['unixTimeStamp'];
 }
 $dateTimeNow = new DateTime();
-$timeDiffMedium = $dateTimeNow->diff(new DateTime("@".strval(strtotime('-15 minutes', $actualDepartureTime)))); // -1 extra due to stupid clock
-$timeDiffShort =  $dateTimeNow->diff(new DateTime("@".strval(strtotime('-5 minutes', $actualDepartureTime)))); // -1 extra due to stupid clock
-$timeDiffDeparture =  $dateTimeNow->diff(new DateTime("@".strval($actualDepartureTime)));
+$timeDiffDeparture =  $dateTimeNow->diff(new DateTime("@".$actualDepartureTime));
+$travelTime = intval($element['travelTime']);
 
-if (!$timeDiffDeparture->h == 0 && !$timeDiffDeparture->invert)
+if ($timeDiffDeparture->h != 0 && !$timeDiffDeparture->invert)
 {
     $timeUntillDeparture = "60+ min";
 }
@@ -42,27 +41,27 @@ else
 {
     $timeUntillDeparture = ($timeDiffDeparture->i+1)." min";
 
-    if ($timeDiffDeparture->i == 0 && $timeDiffDeparture->invert)
+    if ($timeDiffDeparture->i <= 0 + $travelTime)
     {
         $state = "critical";
-        $timeUntillDeparture = "NU";
+        if ($travelTime == 0)
+        {
+            $timeUntillDeparture = "NU";
+        }
     }
-    else if ($timeDiffDeparture->i > 0 && $timeDiffDeparture->invert)
+    else if ($timeDiffDeparture->i > 0 + $travelTime && $timeDiffDeparture->invert)
     {
         $state = "passed";
     }
-    else if ($timeDiffShort->invert ||$timeDiffDeparture->i == 5)
+    else if ($timeDiffDeparture->i <= 5 + $travelTime)
     {
         $state = "high";
     }
-    else if ($timeDiffMedium->invert || $timeDiffDeparture->i == 15)
+    else if ($timeDiffDeparture->i <= 15 + $travelTime)
     {
         $state = "low";
     }
 }
-
-
-
 
 ?>
 
