@@ -1,10 +1,10 @@
 var idArray = Array();
 var currentId;
-var interval = 15000;
+var interval = 10000;
 
 var clock = setInterval(GetData, interval);
 
-idArray = ["7,8,12","9,10,11"];
+idArray = ["7,8,12","9,11,12"];
 GetData();
 
 function GetData() {

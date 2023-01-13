@@ -63,6 +63,45 @@ else
     }
 }
 
+/*
+$timeDiffMedium = $dateTimeNow->diff(new DateTime("@".strval(strtotime('-15 minutes', $actualDepartureTime)))); // -1 extra due to stupid clock
+$timeDiffShort =  $dateTimeNow->diff(new DateTime("@".strval(strtotime('-5 minutes', $actualDepartureTime)))); // -1 extra due to stupid clock
+$timeDiffDeparture =  $dateTimeNow->diff(new DateTime("@".$actualDepartureTime));
+
+if (!$timeDiffDeparture->h == 0 && !$timeDiffDeparture->invert)
+{
+    $timeUntillDeparture = "60+ min";
+}
+else
+{
+    $timeUntillDeparture = ($timeDiffDeparture->i+1)." min";
+
+    if ($timeDiffDeparture->i == 0 && $timeDiffDeparture->invert)
+    {
+        $state = "critical";
+        if (intval($element['travelTime'] == 0))
+        {
+            $timeUntillDeparture = "NU";
+        }
+    }
+    else if ($timeDiffDeparture->i > 0 && $timeDiffDeparture->invert)
+    {
+        $state = "passed";
+    }
+    else if ($timeDiffShort->invert || $timeDiffDeparture->i == 5)
+    {
+        $state = "high";
+    }
+    else if ($timeDiffMedium->invert || $timeDiffDeparture->i == 15)
+    {
+        $state = "low";
+    }
+}
+*/
+
+
+
+
 ?>
 
 <div class="dataCell" state="<?=$state?>" late="<?=$late?>">

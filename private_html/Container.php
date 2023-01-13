@@ -21,7 +21,8 @@ class Container
         // Container setup //
         date_default_timezone_set("Europe/Stockholm");
         error_reporting(2147483647);
-        ini_set('error_log', "");
+        ini_set('error_log', "../tmp/php.error.log");
+	
     }
 
     public function DB()

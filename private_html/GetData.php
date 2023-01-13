@@ -5,7 +5,7 @@ require_once "Container.php";
 $container = new Container();
 
 // Logging config START //
-$api_log_path = "";
+$api_log_path = "../tmp/api.log";
 
 if (!file_exists($api_log_path))
 {
@@ -15,7 +15,6 @@ if (!file_exists($api_log_path))
 error_reporting(2147483647);
 ini_set('error_log', $api_log_path);
 // Logging config END //
-
 
 /*
  * API CALL AND RESPONSE PROCESSER

@@ -15,7 +15,7 @@ class Functions
 
         try
         {
-            $response_xml_data = file_get_contents("https://api.resrobot.se/v2/departureBoard?key=".$container->Credentials()->GetAPICredentials()['key']."&id=".$externalId."&passlist=0".$extraAttributes);            
+            $response_xml_data = file_get_contents("https://api.resrobot.se/v2.1/departureBoard?accessId=".$container->Credentials()->GetAPICredentials()['key']."&id=".$externalId."&passlist=0".$extraAttributes);            
             return $response_xml_data;
         }
         catch (Exception $e)
@@ -28,55 +28,23 @@ class Functions
     public function GenerateDepartureObjects($rawXML)
     {
         $arrayOfObjects = array();
-        $data = new DOMDocument();
-        $data->createElementNS("https://api.resrobot.se/xsd?hafasRestDepartureBoard.xsd", "hafas_rest_v1");
-        $XMLToLoad = str_replace("hafas_rest_v1","https://api.resrobot.se/xsd?hafasRestDepartureBoard.xsd",$rawXML);
-        $data->loadXML($XMLToLoad);
-        $xpath = new DOMXPath($data);
-        $xpath->registerNamespace("xmlns", "https://api.resrobot.se/xsd?hafasRestDepartureBoard.xsd");
-        
-        $printData = $xpath->query("//xmlns:Departure");
 
-        if ($printData == FALSE)
-        {
-            error_log("ERROR: printData equal to FALSE");
-        }
-        else
-        {
-            $dateTimeNow = new DateTime();
-            foreach ($printData as $key => $element) {
-                
-                $listOfValues = $xpath->query("./@direction | ./@name", $element);
-                $objectData = array();
+        $xml = simplexml_load_string($rawXML);
 
-                $directionValue = $listOfValues[0]->value;
-                $pos = strpos($directionValue,'(');
-                if (is_numeric($pos))
-                {
-                    $objectData  += ["direction" => substr($directionValue, 0, $pos)];   
-                }
-                else
-                {
-                    $objectData  += ["direction" => $directionValue];
-                }
-                
+        $dateTimeNow = new DateTime();
 
-                 
-                $objectData  += ["name" => $listOfValues[1]->value]; 
+        foreach ($xml->Departure as $key => $element) {
+            $data = [];
 
-                $objectData  += ["collectionUnixTimeStamp" => $dateTimeNow->getTimestamp()];  
-
-                $listOfValues = $xpath->query("./@date | ./@time", $element);
-                $objectData  += ["unixTimeStamp" => strtotime($listOfValues[0]->value." ".$listOfValues[1]->value)];  
-
-                $listOfValues = $xpath->query("./@rtDate | ./@rtTime", $element);
-                if (count($listOfValues) > 0)
-                {
-                    $objectData  += ["rtUnixTimeStamp" => strtotime($listOfValues[0]->value." ".$listOfValues[1]->value)];
-                }
-                $obj = (object)$objectData;
-                array_push($arrayOfObjects, $obj);
+            $data['direction'] = preg_replace("/ \(.*\)/", "", (string)$element->attributes()['direction']);
+            $data['name'] = (string)$element->attributes()['name'];
+            $data['collectionUnixTimeStamp'] = $dateTimeNow->getTimestamp();
+            $data['unixTimeStamp'] = strtotime((string)$element->attributes()['date'] . " " . (string)$element->attributes()['time']);
+            if (isset($element->attributes()['rtDate'])) {
+                $data['rtunixTimeStamp'] = strtotime((string)$element->attributes()['rtDate'] . " " . (string)$element->attributes()['rtTime']);
             }
+
+            array_push($arrayOfObjects, (object)$data);
         }
         return (object)$arrayOfObjects;
     }

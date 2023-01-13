@@ -27,8 +27,8 @@ class Credentials
     {
         try
         {
-            $file = fopen("/var/www/SSIS_Lokaltrafik_Display/private_html/access.json", "r");
-            $rawData = fread($file,filesize("/var/www/SSIS_Lokaltrafik_Display/private_html/access.json"));
+            $file = fopen("../private_html/access.json", "r");
+            $rawData = fread($file,filesize("../private_html/access.json"));
             fclose($file);
     
             $data = json_decode($rawData);
